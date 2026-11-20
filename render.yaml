@@ -1,0 +1,46 @@
+# Render Blueprint (https://render.com/docs/blueprint-spec)
+# Web service = Django API (/api) + frontend (/). Optional cron job for reminders
+# (Render cron jobs are paid; the free alternative is .github/workflows/reminders.yml).
+# Values marked sync:false are secrets you type in the Render dashboard — never commit them.
+envVarGroups:
+  - name: absenninn-shared
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DATABASE_URL              # Supabase → Connect → "Session pooler" URI (port 5432)
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY # server only
+        sync: false
+
+services:
+  - type: web
+    name: absenninn
+    runtime: docker
+    plan: free
+    region: singapore
+    healthCheckPath: /api/health/
+    envVars:
+      - fromGroup: absenninn-shared
+      - key: DJANGO_ALLOWED_HOSTS
+        value: absenninn.onrender.com
+      - key: FRONTEND_URL
+        value: https://absenninn.onrender.com
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET       # only if the project still uses the legacy HS256 JWT secret
+        sync: false
+      - key: CRON_SECRET
+        generateValue: true
+
+  # Uncomment to run reminders on Render instead of GitHub Actions:
+  # - type: cron
+  #   name: absenninn-reminders
+  #   runtime: docker
+  #   schedule: "*/15 0-14 * * *"      # 07:00–21:59 WIB
+  #   dockerCommand: python manage.py send_reminders
+  #   envVars:
+  #     - fromGroup: absenninn-shared

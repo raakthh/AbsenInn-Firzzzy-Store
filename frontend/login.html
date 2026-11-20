@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6C55F2">
+  <title>Masuk · AbsenInn</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-root="">
+  <div class="auth">
+    <section class="auth-visual" aria-hidden="true">
+      <div class="brand">
+        <img class="brand-mark" src="assets/images/logo-mark.svg" alt="" style="width:44px;height:44px;filter:drop-shadow(0 6px 16px rgba(0,0,0,.18))">
+        <div><div class="brand-name">Absen<span>Inn</span></div><div class="brand-desc">SMART EMPLOYEE MANAGEMENT</div></div>
+      </div>
+      <div>
+        <h1 class="auth-headline">Kerja Lebih Teratur,<br>Tim Lebih Produktif.</h1>
+        <p class="auth-lead">Kelola absensi, izin, tugas, dan penggajian karyawan UMKM Anda dalam satu platform yang rapi dan aman.</p>
+        <div class="auth-features">
+          <div class="auth-feature"><i data-icon="scan-face"></i>Absensi Selfie + GPS</div>
+          <div class="auth-feature"><i data-icon="file-text"></i>Izin & Cuti Online</div>
+          <div class="auth-feature"><i data-icon="clipboard-list"></i>Manajemen Tugas</div>
+          <div class="auth-feature"><i data-icon="wallet"></i>Payroll & Slip Gaji</div>
+        </div>
+        <div class="auth-preview">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3"><span class="stat-icon tone-success"><i data-icon="check-circle"></i></span>
+              <div><div class="fw-700">Check-in tercatat</div><div class="text-xs text-3">Lokasi terverifikasi · 18 m dari kantor</div></div></div>
+            <span class="badge badge-success">Hadir</span>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.75rem;color:rgba(255,255,255,.6)">© AbsenInn · Portfolio project — HR & Workforce Management System</p>
+    </section>
+
+    <section class="auth-form-wrap">
+      <div class="auth-form">
+        <div class="brand mb-4" style="margin-bottom:28px">
+          <img class="brand-mark" src="assets/images/logo-mark.svg" alt="">
+          <div><div class="brand-name">Absen<span>Inn</span></div><div class="brand-desc">SMART EMPLOYEE MANAGEMENT</div></div>
+        </div>
+        <h1>Selamat datang kembali 👋</h1>
+        <p class="text-2 mt-2">Masuk untuk melanjutkan ke dashboard Anda.</p>
+
+        <form id="login-form" class="mt-6" novalidate>
+          <div class="field" data-field="email">
+            <label class="label" for="email">Email</label>
+            <div class="input-group"><i data-icon="mail"></i><input class="input" id="email" name="email" type="email" autocomplete="username" placeholder="nama@perusahaan.com" required></div>
+            <span class="field-error"></span>
+          </div>
+          <div class="field mt-4" data-field="password">
+            <label class="label" for="password">Password</label>
+            <div class="input-group"><i data-icon="lock"></i><input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+              <button type="button" class="btn btn-ghost btn-icon btn-sm input-action" id="toggle-pw" aria-label="Tampilkan password"><i data-icon="eye"></i></button></div>
+            <span class="field-error"></span>
+          </div>
+          <div class="flex items-center justify-between mt-4">
+            <label class="check text-sm"><input type="checkbox" name="remember"> Ingat saya</label>
+            <button type="button" class="btn btn-ghost btn-sm" id="forgot">Lupa password?</button>
+          </div>
+          <div id="login-alert" class="mt-4"></div>
+          <button class="btn btn-primary btn-lg btn-block mt-4" type="submit" id="login-btn"><i data-icon="log-in"></i>Masuk</button>
+        </form>
+
+        <div class="demo-accounts" id="demo-accounts">
+          <div class="flex items-center gap-2 fw-700 text-sm text-primary"><i data-icon="sparkles"></i>Mode Demo — akun fiktif</div>
+          <p class="text-xs text-2 mt-1">Password semua akun demo: <code><b>demo1234</b></code>. Klik akun untuk mengisi otomatis.</p>
+          <div id="demo-list"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/core/icons.js"></script>
+  <script src="js/core/format.js"></script>
+  <script src="js/core/store.js"></script>
+  <script src="js/core/ui.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/login.js"></script>
+</body>
+</html>

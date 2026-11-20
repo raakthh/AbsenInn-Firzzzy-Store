@@ -1,0 +1,8 @@
+.git
+.env
+**/__pycache__
+**/*.pyc
+backend/local_storage
+tools/screenshots
+database/seed.private.sql
+*.private.sql

@@ -1,0 +1,18 @@
+# Free alternative to a paid cron job: GitHub calls the reminder endpoint every 15 minutes.
+# Repository → Settings → Secrets and variables → Actions:
+#   ABSENINN_URL  = https://absenninn.onrender.com   (no trailing slash)
+#   CRON_SECRET   = same value as the server's CRON_SECRET
+name: Reminders
+on:
+  schedule:
+    - cron: "*/15 0-14 * * *"     # 07:00–21:59 WIB (UTC+7)
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    if: ${{ vars.REMINDERS_ENABLED == 'true' }}
+    steps:
+      - name: Trigger reminders
+        run: |
+          curl -fsS -X POST "${{ secrets.ABSENINN_URL }}/api/cron/reminders/" -H "X-Cron-Secret: ${{ secrets.CRON_SECRET }}" --max-time 60

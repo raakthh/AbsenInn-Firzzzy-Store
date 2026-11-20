@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6C55F2">
+  <title>AbsenInn — Kerja Lebih Teratur, Tim Lebih Produktif.</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-root="">
+  <!-- Loading screen: routes the user to login or their role dashboard -->
+  <div class="splash">
+    <div class="splash-inner">
+      <img class="splash-mark" src="assets/images/logo-mark.svg" alt="">
+      <div style="font-weight:800;font-size:1.3rem;letter-spacing:-.02em">Absen<span style="color:var(--primary-500)">Inn</span></div>
+      <div class="splash-bar"></div>
+      <noscript><p>AbsenInn membutuhkan JavaScript.</p></noscript>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/core/format.js"></script>
+  <script src="js/core/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (function () {
+      if (Auth.blockedByFileProtocol) return;
+      var started = Date.now();
+      Auth.current().then(function (s) {
+        setTimeout(function () { location.replace(s ? Auth.homeFor(s.role) : 'login.html'); }, Math.max(0, 500 - (Date.now() - started)));
+      });
+    })();
+  </script>
+</body>
+</html>

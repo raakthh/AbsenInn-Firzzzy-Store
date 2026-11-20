@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 56" role="img" aria-label="AbsenInn — Smart Employee Management">
+  <defs>
+    <linearGradient id="ag2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6C55F2"/><stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(4 4)">
+    <rect width="48" height="48" rx="13" fill="url(#ag2)"/>
+    <path d="M13.5 36.5 24 11.5l10.5 25" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="m18.2 27.6 4.3 4 8.6-9.4" fill="none" stroke="#4FE0B8" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="64" y="30" font-family="Plus Jakarta Sans, Segoe UI, Arial, sans-serif" font-size="25" font-weight="800" letter-spacing="-0.5" fill="#17153B">Absen<tspan fill="#6C55F2">Inn</tspan></text>
+  <text x="65" y="46" font-family="Plus Jakarta Sans, Segoe UI, Arial, sans-serif" font-size="8.6" font-weight="700" letter-spacing="2.2" fill="#7A809E">SMART EMPLOYEE MANAGEMENT</text>
+</svg>
