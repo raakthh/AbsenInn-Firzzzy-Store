@@ -45,6 +45,9 @@ SECRET_KEY = env("DJANGO_SECRET_KEY") or ("dev-only-insecure-key" if DEBUG else 
 if not SECRET_KEY:
     raise RuntimeError("DJANGO_SECRET_KEY wajib diisi saat DJANGO_DEBUG=False")
 ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+# Render provides the service's public hostname/URL — accept it automatically.
+if env("RENDER_EXTERNAL_HOSTNAME"):
+    ALLOWED_HOSTS.append(env("RENDER_EXTERNAL_HOSTNAME"))
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
@@ -139,7 +142,7 @@ BUCKET_COMPANY = env("SUPABASE_STORAGE_BUCKET_COMPANY", "company-assets")
 SIGNED_URL_EXPIRES_SECONDS = int(env("SIGNED_URL_EXPIRES_SECONDS", "300"))
 # Where invited employees land after accepting the e-mail invitation.
 CRON_SECRET = env("CRON_SECRET", "")                          # protects POST /api/cron/reminders/
-FRONTEND_URL = (env("FRONTEND_URL") or "http://localhost:8000").rstrip("/")
+FRONTEND_URL = (env("FRONTEND_URL") or env("RENDER_EXTERNAL_URL") or "http://localhost:8000").rstrip("/")
 
 # ---------------- Security (production) ----------------
 if not DEBUG:

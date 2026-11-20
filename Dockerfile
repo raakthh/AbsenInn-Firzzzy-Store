@@ -17,4 +17,5 @@ RUN useradd --create-home app && chown -R app /app
 USER app
 WORKDIR /app/backend
 EXPOSE 8000
-CMD gunicorn config.wsgi --bind 0.0.0.0:${PORT} --workers ${WEB_CONCURRENCY:-2} --timeout 60 --access-logfile -
+# FRONTEND_MODE=production → config.js switched to production inside the container (the repo stays demo).
+CMD python manage.py write_frontend_config && gunicorn config.wsgi --bind 0.0.0.0:${PORT} --workers ${WEB_CONCURRENCY:-2} --timeout 60 --access-logfile -

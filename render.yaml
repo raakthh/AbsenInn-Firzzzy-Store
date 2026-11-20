@@ -25,11 +25,13 @@ services:
     healthCheckPath: /api/health/
     envVars:
       - fromGroup: absenninn-shared
+      # The *.onrender.com hostname is added automatically (RENDER_EXTERNAL_HOSTNAME).
+      # Add a custom domain here later if you use one, e.g. absen.firzzzystore.com
       - key: DJANGO_ALLOWED_HOSTS
-        value: absenninn.onrender.com
-      - key: FRONTEND_URL
-        value: https://absenninn.onrender.com
-      - key: SUPABASE_ANON_KEY
+        value: localhost
+      - key: FRONTEND_MODE             # the repo ships demo mode; this switches the served UI to production
+        value: production
+      - key: SUPABASE_ANON_KEY         # public anon/publishable key (written into the served config.js)
         sync: false
       - key: SUPABASE_JWT_SECRET       # only if the project still uses the legacy HS256 JWT secret
         sync: false

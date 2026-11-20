@@ -8,6 +8,12 @@ AbsenInn membantu pemilik UMKM mengelola karyawan, absensi selfie + GPS, izin/cu
 
 ---
 
+## Demo
+
+**Live demo (data fiktif):** `https://<username>.github.io/<repo>/` · login `owner@absenninn.demo` / `demo1234` (karyawan: `aisyah@absenninn.demo`)
+
+Repo ini selalu dalam **mode demo**. Versi produksi (dipakai sungguhan oleh Firzzzy Store) di-deploy dari repo yang sama ke Render dengan `FRONTEND_MODE=production` — data asli ada di Supabase, tidak pernah di repo. Lihat [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
 ## Status pengembangan
 
 | Phase | Lingkup | Status |

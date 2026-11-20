@@ -45,14 +45,17 @@ consistency check, 77 Django tests, and `check --deploy`.
 3. If the service name/URL differs from `absenninn.onrender.com`, update `DJANGO_ALLOWED_HOSTS` and `FRONTEND_URL`.
 4. Open `https://<service>.onrender.com/api/health/` → it should show `{"status": "ok"}`.
 
-## 4. Frontend → production
-Edit `frontend/js/config.js`, then commit and push (Render redeploys automatically):
-```js
-MODE: 'production',
-SUPABASE_URL: 'https://<project-ref>.supabase.co',
-SUPABASE_ANON_KEY: '<anon / publishable key>',   // public by design — NOT the service_role key
-API_BASE_URL: '/api',                            // same origin as Render
-```
+## 4. Frontend → production (automatic)
+**Don't edit `config.js` in the repository.** It stays `MODE: 'demo'` for the public portfolio.
+On Render, `FRONTEND_MODE=production` (already in `render.yaml`) plus `SUPABASE_URL` and
+`SUPABASE_ANON_KEY` make the container rewrite its own copy of `config.js` at startup
+(`python manage.py write_frontend_config`). So one repository gives you:
+
+| | URL | Mode | Data |
+|---|---|---|---|
+| Portfolio demo | `https://<username>.github.io/<repo>/` (GitHub Pages) | demo | fictitious data in the visitor's browser |
+| Real store | `https://<service>.onrender.com` (Render) | production | Firzzzy Store in Supabase |
+
 Supabase → Authentication → **URL Configuration**: Site URL = `https://<service>.onrender.com`,
 Redirect URLs += `https://<service>.onrender.com/**`. This makes password reset and employee
 invitations land on your site.
@@ -74,7 +77,7 @@ GitHub's scheduler can run a few minutes late. If you need exact timing, uncomme
 2. Payroll → *Konfigurasi Gaji* → fill in each employee's basic salary, allowances and overtime rate.
 3. Employees open the site on their phone (Chrome/Safari), log in, and allow **camera** and **location**.
    Adding it to the home screen makes it feel like an app.
-4. On each payday (Ira on the 20th, Laila on the 14th, Tanti on the 16th): Payroll → **Hitung Payroll**
+4. On each employee's payday (their join date): Payroll → **Hitung Payroll**
    → check the warnings → Ajukan → Setujui → transfer manually → **Konfirmasi Pembayaran**.
 
 ## Notes on free tiers
