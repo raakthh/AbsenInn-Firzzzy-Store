@@ -622,7 +622,7 @@
       if (Number(d.overtime_rate_per_hour) < 0) errors.overtime_rate_per_hour = 'Tidak boleh negatif';
       (d.allowances || []).forEach((a, i) => { if (!a.name || !(Number(a.amount) >= 0)) errors[`allowance_${i}`] = 'Nama & nominal tunjangan wajib valid'; });
       if (Object.keys(errors).length) throw new ApiError('Periksa konfigurasi gaji', 'VALIDATION', 422, errors);
-      Object.assign(c, { basic_salary: Number(d.basic_salary), overtime_rate_per_hour: Number(d.overtime_rate_per_hour || 0), allowances: (d.allowances || []).map((a) => ({ name: a.name.trim(), amount: Number(a.amount) })) });
+      Object.assign(c, { pay_day: d.pay_day ? Number(d.pay_day) : null, basic_salary: Number(d.basic_salary), overtime_rate_per_hour: Number(d.overtime_rate_per_hour || 0), allowances: (d.allowances || []).map((a) => ({ name: a.name.trim(), amount: Number(a.amount) })) });
       audit(s, 'payroll.salary_config', 'employee_salary_configuration', empId, `Memperbarui konfigurasi gaji ${empById(empId).full_name}`);
       commit(); return c;
     },

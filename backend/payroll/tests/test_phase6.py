@@ -163,6 +163,17 @@ class PayrollTests(ApiTestCase):
         for a in ("payroll.generate", "payroll.recalculate", "payroll.adjust", "payroll.item_update", "payroll.approve", "payroll.confirm_payment"):
             self.assertIn(a, actions)
 
+    def test_custom_pay_day(self):
+        with frozen(NOW):
+            self.assertStatus(self.owner.put(f"/api/payroll/salary-configurations/{self.emps['laila'].id}/", {"basic_salary": 2600000, "pay_day": 40}, format="json"), 422)
+            c = self.assertStatus(self.owner.put(f"/api/payroll/salary-configurations/{self.emps['laila'].id}/", {"basic_salary": 2600000, "pay_day": 25, "allowances": []}, format="json"), 200)
+        self.assertEqual(c["pay_day"], 25)
+        it = [i for i in self.assertStatus(self.generate("2026-12"), 200)["items"] if i["employee_id"] == str(self.emps["laila"].id)][0]
+        self.assertEqual((it["cycle_start"], it["cycle_end"], it["payment_date"]), ("2026-11-25", "2026-12-24", "2026-12-25"))
+        with frozen(NOW):
+            c = self.assertStatus(self.owner.put(f"/api/payroll/salary-configurations/{self.emps['laila'].id}/", {"basic_salary": 2600000, "pay_day": "", "allowances": []}, format="json"), 200)
+        self.assertIsNone(c["pay_day"])                                           # back to join date (14th)
+
     def test_salary_configuration(self):
         new = Employee.objects.create(company_id=self.company.id, full_name="Dina (uji)", email="dina@firzzzystore.com", position="Kasir", join_date=dt.date(2026, 9, 5))
         cfgs = self.assertStatus(self.owner.get("/api/payroll/salary-configurations/"), 200)

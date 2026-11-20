@@ -159,6 +159,7 @@
       { label: 'Karyawan', render: (c) => UI.person(c.employee) }, { label: 'Gaji pokok', render: (c) => (c.configured === false ? '<span class="badge badge-pending">Belum diisi</span>' : `<b>${Fmt.rupiah(c.basic_salary)}</b>`) },
       { label: 'Tunjangan', render: (c) => (c.allowances.length ? c.allowances.map((a) => `<div class="text-sm">${esc(a.name)}: ${Fmt.rupiah(a.amount)}</div>`).join('') : '<span class="text-3">—</span>') },
       { label: 'Lembur / jam', render: (c) => Fmt.rupiah(c.overtime_rate_per_hour) },
+      { label: 'Tgl gajian', render: (c) => (c.pay_day ? `Tgl ${c.pay_day}` : '<span class="text-3">Tgl masuk</span>') },
       { label: 'Estimasi kotor', render: (c) => Fmt.rupiah(c.basic_salary + c.allowances.reduce((s, a) => s + a.amount, 0)) },
       { label: '', cls: 'col-actions', render: (c) => `<button class="btn btn-outline btn-sm" data-cfg="${c.employee_id}">${icon('pencil', 15)}Ubah</button>` }] });
     p.onclick = (e) => { const b = e.target.closest('[data-cfg]'); if (b) editConfig(cfgs.find((c) => c.employee_id === b.dataset.cfg)); };
@@ -168,6 +169,7 @@
     const allowRow = (a = { name: '', amount: '' }, i) => `<div class="flex gap-2 items-center" data-allow><input class="input input-sm" data-an placeholder="Nama tunjangan" value="${esc(a.name)}" aria-label="Nama tunjangan ${i + 1}"><input class="input input-sm" data-aa type="number" min="0" step="10000" placeholder="Nominal" value="${a.amount}" style="max-width:160px" aria-label="Nominal tunjangan ${i + 1}"><button type="button" class="btn btn-ghost btn-icon btn-sm text-danger" data-rm aria-label="Hapus">${icon('trash', 15)}</button></div>`;
     const m = UI.modal({ title: 'Konfigurasi Gaji', subtitle: esc(c.employee.full_name), size: 'lg',
       body: `<form class="form-grid" novalidate data-f>${UI.field({ name: 'basic_salary', label: 'Gaji pokok (Rp/bulan)', type: 'number', value: c.basic_salary, required: true, attrs: 'min="0" step="50000"' })}${UI.field({ name: 'overtime_rate_per_hour', label: 'Tarif lembur (Rp/jam)', type: 'number', value: c.overtime_rate_per_hour, attrs: 'min="0" step="1000"' })}
+        ${UI.field({ name: 'pay_day', label: 'Tanggal gajian (1–31)', type: 'number', value: c.pay_day || '', attrs: 'min="1" max="31" step="1"', placeholder: 'Ikuti tanggal masuk', hint: 'Kosongkan = mengikuti tanggal masuk kerja. Jika bulan lebih pendek, dibayar di hari terakhir bulan itu. Dipakai bila Settings → Payroll memakai aturan "tanggal masuk".' })}
         <div class="span-2"><div class="label mb-4">Tunjangan tetap</div><div class="flex" style="flex-direction:column;gap:8px" data-allows>${c.allowances.map(allowRow).join('')}</div><button type="button" class="btn btn-ghost btn-sm mt-2" data-add>${icon('plus')}Tambah tunjangan</button><div class="field-error" data-allow-err></div></div>
         <div class="span-2 alert alert-warning">${icon('info')}<div>Perubahan berlaku untuk perhitungan payroll berikutnya. Payroll yang sudah disetujui tidak berubah.</div></div></form>`,
       footer: `<button class="btn btn-outline" data-close>Batal</button><button class="btn btn-primary" data-save>${icon('check')}Simpan</button>` });
@@ -175,7 +177,7 @@
     form.querySelector('[data-add]').addEventListener('click', () => list.insertAdjacentHTML('beforeend', allowRow(undefined, list.children.length)));
     list.addEventListener('click', (e) => { const r = e.target.closest('[data-rm]'); if (r) r.closest('[data-allow]').remove(); });
     m.el.querySelector('[data-save]').addEventListener('click', async (ev) => { const btn = ev.currentTarget;
-      const d = UI.validate(form, { basic_salary: [UI.rules.required(), UI.rules.positive()] }); if (!d) return;
+      const d = UI.validate(form, { basic_salary: [UI.rules.required(), UI.rules.positive()], pay_day: [(v) => (v !== '' && v != null && !(Number(v) >= 1 && Number(v) <= 31 && Number.isInteger(Number(v))) ? 'Isi 1–31 atau kosongkan' : null)] }); if (!d) return;
       const allowances = $$('[data-allow]', list).map((r) => ({ name: r.querySelector('[data-an]').value.trim(), amount: r.querySelector('[data-aa]').value })).filter((a) => a.name || a.amount);
       if (allowances.some((a) => !a.name || a.amount === '' || Number(a.amount) < 0)) { form.querySelector('[data-allow-err]').textContent = 'Lengkapi nama dan nominal setiap tunjangan.'; return; }
       const r = await UI.submit(btn, form, () => API.payroll.updateSalaryConfig(c.employee_id, { ...d, allowances }));
